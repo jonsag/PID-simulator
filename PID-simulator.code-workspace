@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "PID-simulator_pio",
+			"path": "PID-simulator_pio"
+		}
+	],
+	"settings": {}
+}
