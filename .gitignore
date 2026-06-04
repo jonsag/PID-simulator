@@ -1,1 +1,8 @@
 PID-simulator_kicad/PID-simulator_kicad-backups/
+PID-simulator_kicad/production/
+_autosave*
+*.lck
+PID-simulator_kicad/fabrication-toolkit-options.json
+*.dsn
+*.round-tracks-config
+*.ses
