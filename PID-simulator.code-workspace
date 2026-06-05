@@ -8,5 +8,9 @@
 			"path": "PID-simulator_pio"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cSpell.words": [
+			"SWITCHCAPVCC"
+		]
+	}
 }

@@ -6,3 +6,6 @@ PID-simulator_kicad/fabrication-toolkit-options.json
 *.dsn
 *.round-tracks-config
 *.ses
+*.rules
+*.ses
+*.kicad_prl
