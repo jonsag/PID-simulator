@@ -45,5 +45,3 @@ void motorTest()
 
     delay(3000);
 }
-
-
