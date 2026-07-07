@@ -12,7 +12,7 @@
 /*******************************
   Debugging
 *******************************/
-#define DEBUG 0 // debugMess is off when 0
+#define DEBUG 1 // debugMess is off when 0
 #define INFO 1
 
 #if DEBUG
@@ -40,11 +40,11 @@
   Encoders
 *******************************/
 #include <Encoder.h>
-
-Encoder setEnc(6, 7);
-Encoder PEnc(8, 9);
-Encoder IEnc(10, 11);
-Encoder DEnc(12, 13);
+  
+Encoder setEnc(7, 6);
+Encoder PEnc(9, 8);
+Encoder IEnc(11, 10);
+Encoder DEnc(13, 12);
 
 long setOldPosition = -999;
 long setNewPosition;
@@ -55,6 +55,15 @@ long INewPosition;
 long DOldPosition = -999;
 long DNewPosition;
 
+#define setMinValue -18
+#define setMaxValue 18
+#define PMinValue 0
+#define PMaxValue 10
+#define IMinValue 0
+#define IMaxValue 10
+#define DMinValue 0
+#define DMaxValue 10
+
 /*******************************
   Screen
 *******************************/
@@ -63,10 +72,17 @@ long DNewPosition;
 #include <Adafruit_SSD1306.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3D // See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define SCREEN_ADDRESS 0x3C // See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+
+#define Line_1 0
+#define Line_2 11
+#define Line_3 22
+//#define LINE_1 0
+#define Column_1 0
+#define Column_2 64
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -75,6 +91,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 *******************************/
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
+
+#define MPU_ADDRESS 0x68
 
 Adafruit_MPU6050 mpu;
 
