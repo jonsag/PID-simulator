@@ -76,7 +76,7 @@ void displayPID(String factor, long value)
         ClearColumn(1, 1);
         display.setCursor(Column_1, Line_1);
         display.write("P");
-        display.setCursor(Column_1 + 10, Line_1);
+        display.setCursor(Column_1 + 1 * textWidth + 2, Line_1);
         display.print(value);
         display.display();
     }
@@ -88,11 +88,11 @@ void displayPID(String factor, long value)
         ClearColumn(1, 2);
         display.setCursor(Column_1, Line_2);
         display.write("I");
-        display.setCursor(Column_1 + 10, Line_2);
+        display.setCursor(Column_1 + 1 * textWidth + 2, Line_2);
         display.print(value);
         display.display();
     }
-    else
+    else if (factor == "D")
     {
         debugMess("Writing D-value, ");
         debugMess(value);
@@ -100,7 +100,19 @@ void displayPID(String factor, long value)
         ClearColumn(1, 3);
         display.setCursor(Column_1, Line_3);
         display.write("D");
-        display.setCursor(Column_1 + 10, Line_3);
+        display.setCursor(Column_1 + 1 * textWidth + 2, Line_3);
+        display.print(value);
+        display.display();
+    }
+    else
+    {
+        debugMess("Writing Set-value, ");
+        debugMess(value);
+        debugMessln(", on line 4");
+        ClearColumn(1, 4);
+        display.setCursor(Column_1, Line_4);
+        display.write("Set ");
+        display.setCursor(Column_1 + 3 * textWidth + 2, Line_4);
         display.print(value);
         display.display();
     }

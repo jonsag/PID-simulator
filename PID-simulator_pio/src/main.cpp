@@ -59,7 +59,7 @@ void setup()
     /*******************************
       MPU6050 Setup
     *******************************/
-    infoMessln("Starting MPU6050 ...");
+    /*infoMessln("Starting MPU6050 ...");
 
     display.setCursor(Column_1, Line_3);
     display.write("Accelerometer...");
@@ -150,9 +150,9 @@ void setup()
     display.setCursor(Column_1, Line_3);
     display.write("Accelerometer!");
     display.display();
-    
+
     infoMessln();
-    delay(500);
+    delay(500);*/
 
     /*******************************
       L298N Setup
@@ -165,7 +165,7 @@ void setup()
     display.display();
 
     motor.setSpeed(initialMotorSpeed); // Set initial speed
-    
+
     ClearLine(3);
     display.setCursor(Column_1, Line_3);
     display.write("Motor driver!");
@@ -179,7 +179,7 @@ void setup()
     infoMessln("Finished booting up!");
     infoMessln("Entering main ...");
     infoMessln();
-    
+
     ClearLine(3);
     display.setCursor(Column_1, Line_3);
     display.write("Starting ...");
@@ -188,7 +188,6 @@ void setup()
 
     display.clearDisplay();
     display.display();
-
 }
 
 void loop()
@@ -196,74 +195,80 @@ void loop()
     /*******************************
       Read Encoders
     *******************************/
-    setNewPosition = setEnc.read();
-    if (setNewPosition != setOldPosition){
-        if (setNewPosition < setMinValue)
-        {
-            setEnc.write(setMinValue);
-            setNewPosition = setMinValue;
-        }
-        else if (setNewPosition > setMaxValue)
-        {
-            setEnc.write(setMaxValue);
-            setNewPosition = setMaxValue;
-        }
+    setEnc.tick();
+    setNewPosition = setEnc.getPosition();
+    if (setNewPosition < setMinValue)
+    {
+        setEnc.setPosition(setMinValue);
+        setNewPosition = setMinValue;
+    }
+    else if (setNewPosition > setMaxValue)
+    {
+        setEnc.setPosition(setMaxValue);
+        setNewPosition = setMaxValue;
+    }
+    if (setNewPosition != setOldPosition)
+    {
         setOldPosition = setNewPosition;
         infoMess("Set value: ");
         infoMessln(setNewPosition);
+        displayPID("S", setNewPosition);
     }
 
-    PNewPosition = PEnc.read();
+    PEnc.tick();
+    PNewPosition = PEnc.getPosition();
+    if (PNewPosition < PMinValue)
+    {
+        PEnc.setPosition(PMinValue);
+        PNewPosition = PMinValue;
+    }
+    else if (PNewPosition > PMaxValue)
+    {
+        PEnc.setPosition(PMaxValue);
+        PNewPosition = PMaxValue;
+    }
     if (PNewPosition != POldPosition)
     {
-        if (PNewPosition < PMinValue)
-        {
-            PEnc.write(PMinValue);
-            PNewPosition = PMinValue;
-        }
-        else if (PNewPosition > PMaxValue)
-        {
-            PEnc.write(PMaxValue);
-            PNewPosition = PMaxValue;
-        }
         POldPosition = PNewPosition;
         infoMess("P value:   ");
         infoMessln(PNewPosition);
         displayPID("P", PNewPosition);
     }
 
-    INewPosition = IEnc.read();
+    IEnc.tick();
+    INewPosition = IEnc.getPosition();
+    if (INewPosition < IMinValue)
+    {
+        IEnc.setPosition(IMinValue);
+        INewPosition = IMinValue;
+    }
+    else if (INewPosition > IMaxValue)
+    {
+        IEnc.setPosition(IMaxValue);
+        INewPosition = IMaxValue;
+    }
     if (INewPosition != IOldPosition)
     {
-        if (INewPosition < IMinValue)
-        {
-            IEnc.write(IMinValue);
-            INewPosition = IMinValue;
-        }
-        else if (INewPosition > IMaxValue)
-        {
-            IEnc.write(IMaxValue);
-            INewPosition = IMaxValue;
-        }
         IOldPosition = INewPosition;
         infoMess("I value:   ");
         infoMessln(INewPosition);
         displayPID("I", INewPosition);
     }
 
-    DNewPosition = DEnc.read();
+    DEnc.tick();
+    DNewPosition = DEnc.getPosition();
+    if (DNewPosition < DMinValue)
+    {
+        DEnc.setPosition(DMinValue);
+        DNewPosition = DMinValue;
+    }
+    else if (DNewPosition > DMaxValue)
+    {
+        DEnc.setPosition(DMaxValue);
+        DNewPosition = DMaxValue;
+    }
     if (DNewPosition != DOldPosition)
     {
-        if (DNewPosition < DMinValue)
-        {
-            DEnc.write(DMinValue);
-            DNewPosition = DMinValue;
-        }
-        else if (DNewPosition > DMaxValue)
-        {
-            DEnc.write(DMaxValue);
-            DNewPosition = DMaxValue;
-        }
         DOldPosition = DNewPosition;
         infoMess("D value:   ");
         infoMessln(DNewPosition);

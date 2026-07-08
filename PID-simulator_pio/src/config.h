@@ -39,12 +39,12 @@
 /*******************************
   Encoders
 *******************************/
-#include <Encoder.h>
-  
-Encoder setEnc(7, 6);
-Encoder PEnc(9, 8);
-Encoder IEnc(11, 10);
-Encoder DEnc(13, 12);
+#include <RotaryEncoder.h>
+
+RotaryEncoder setEnc(7, 7, RotaryEncoder::LatchMode::TWO03);
+RotaryEncoder PEnc(9, 8, RotaryEncoder::LatchMode::TWO03);
+RotaryEncoder IEnc(11, 10, RotaryEncoder::LatchMode::TWO03);
+RotaryEncoder DEnc(13, 12, RotaryEncoder::LatchMode::TWO03);
 
 long setOldPosition = -999;
 long setNewPosition;
@@ -73,6 +73,8 @@ long DNewPosition;
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
+
+#define textWidth 8
 
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C // See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
