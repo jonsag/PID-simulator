@@ -55,14 +55,14 @@ long INewPosition;
 long DOldPosition = -999;
 long DNewPosition;
 
-#define setMinValue -18
-#define setMaxValue 18
-#define PMinValue 0
-#define PMaxValue 10
-#define IMinValue 0
-#define IMaxValue 10
-#define DMinValue 0
-#define DMaxValue 10
+#define setMinValue -18.0
+#define setMaxValue 18.0
+#define PMinValue 0.0
+#define PMaxValue 10.0
+#define IMinValue 0.0
+#define IMaxValue 10.0
+#define DMinValue 0.0
+#define DMaxValue 10.0
 
 /*******************************
   Screen
@@ -78,9 +78,9 @@ long DNewPosition;
 #define SCREEN_ADDRESS 0x3C // See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 #define Line_1 0
-#define Line_2 11
-#define Line_3 22
-//#define LINE_1 0
+#define Line_2 8
+#define Line_3 16
+#define Line_4 24
 #define Column_1 0
 #define Column_2 64
 

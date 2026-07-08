@@ -40,7 +40,7 @@ void setup()
     }
 
     display.display(); // Show initial display buffer contents on the screen -- the library initializes this with an Adafruit splash screen.
-    delay(1000);       // Pause for 2 seconds
+    delay(500);
 
     display.clearDisplay(); // Clear the buffer
     // display.drawPixel(10, 10, SSD1306_WHITE); // Draw a single pixel in white
@@ -49,20 +49,20 @@ void setup()
     display.setTextColor(SSD1306_WHITE); // Draw white text
     display.cp437(true);                 // Use full 256 char 'Code Page 437' font
 
-    display.setCursor(Column_1, Line_1); // Start at top-left corner
+    display.setCursor(Column_1, Line_1);
     display.write(programName);
-    display.setCursor(Column_1, Line_2); // Start at top-left corner
+    display.setCursor(Column_1, Line_2);
     display.write(web);
-    display.setCursor(Column_1, Line_3); // Start at top-left corner
-    display.write("Accelerometer...");
 
     display.display(); // Show the display buffer on the screen. You MUST call display() after drawing commands to make them visible on screen!
-    delay(1000);
 
     /*******************************
       MPU6050 Setup
     *******************************/
     infoMessln("Starting MPU6050 ...");
+
+    display.setCursor(Column_1, Line_3);
+    display.write("Accelerometer...");
 
     if (!mpu.begin()) // Try to initialize!
     {
@@ -75,12 +75,6 @@ void setup()
 
     infoMessln("MPU6050 Found!");
     infoMessln("Setting up MPU6050 ...");
-
-    ClearLine(3);
-    display.setCursor(Column_1, Line_3); // Start at top-left corner
-    display.write("Accelerometer!");
-    display.display();
-    delay(1000);
 
     mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
 
@@ -152,20 +146,49 @@ void setup()
     }
 #endif
 
+    ClearLine(3);
+    display.setCursor(Column_1, Line_3);
+    display.write("Accelerometer!");
+    display.display();
+    
     infoMessln();
-    delay(100);
+    delay(500);
 
     /*******************************
       L298N Setup
     *******************************/
     infoMessln("Setting up L298 ...");
 
+    ClearLine(3);
+    display.setCursor(Column_1, Line_3);
+    display.write("Motor driver ...");
+    display.display();
+
     motor.setSpeed(initialMotorSpeed); // Set initial speed
+    
+    ClearLine(3);
+    display.setCursor(Column_1, Line_3);
+    display.write("Motor driver!");
+    display.display();
+    delay(500);
     infoMessln();
 
+    /*******************************
+      Finished
+    *******************************/
     infoMessln("Finished booting up!");
     infoMessln("Entering main ...");
     infoMessln();
+    
+    ClearLine(3);
+    display.setCursor(Column_1, Line_3);
+    display.write("Starting ...");
+    display.display();
+    delay(1000);
+
+    display.clearDisplay();
+    display.display();
+
 }
 
 void loop()
@@ -206,6 +229,7 @@ void loop()
         POldPosition = PNewPosition;
         infoMess("P value:   ");
         infoMessln(PNewPosition);
+        displayPID("P", PNewPosition);
     }
 
     INewPosition = IEnc.read();
@@ -224,6 +248,7 @@ void loop()
         IOldPosition = INewPosition;
         infoMess("I value:   ");
         infoMessln(INewPosition);
+        displayPID("I", INewPosition);
     }
 
     DNewPosition = DEnc.read();
@@ -242,6 +267,7 @@ void loop()
         DOldPosition = DNewPosition;
         infoMess("D value:   ");
         infoMessln(DNewPosition);
+        displayPID("D", DNewPosition);
     }
 
     /*******************************
