@@ -2,8 +2,9 @@
 
 #include <config.h>
 
-#include <runMotor.h>
+// #include <runMotor.h>
 #include <screen.h>
+#include <encoders.h>
 
 void setup()
 {
@@ -16,13 +17,13 @@ void setup()
         // do nothing
     }
 
-    infoMessln();
+    infoMessLF();
     infoMessln(programName); // print information
     infoMessln(date);
     infoMess("by ");
     infoMessln(author);
     infoMessln(email);
-    infoMessln();
+    infoMessLF();
 
     /*******************************
       Display Setup
@@ -30,11 +31,11 @@ void setup()
     delay(500);
 
     infoMessln("Starting screen ...");
-    infoMessln();
+    infoMessLF();
 
     if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
     {
-        Serial.println(F("SSD1306 allocation failed"));
+        infoMessln("SSD1306 allocation failed");
         for (;;)
             ; // Don't proceed, loop forever
     }
@@ -49,9 +50,9 @@ void setup()
     display.setTextColor(SSD1306_WHITE); // Draw white text
     display.cp437(true);                 // Use full 256 char 'Code Page 437' font
 
-    display.setCursor(Column_1, Line_1);
+    display.setCursor(0 * columnWidth, 0 * lineHeight);
     display.write(programName);
-    display.setCursor(Column_1, Line_2);
+    display.setCursor(0 * columnWidth, 1 * lineHeight);
     display.write(web);
 
     display.display(); // Show the display buffer on the screen. You MUST call display() after drawing commands to make them visible on screen!
@@ -59,12 +60,12 @@ void setup()
     /*******************************
       MPU6050 Setup
     *******************************/
-    /*infoMessln("Starting MPU6050 ...");
+    infoMessln("Starting MPU6050 ...");
 
-    display.setCursor(Column_1, Line_3);
+    display.setCursor(0 * columnWidth, 2 * lineHeight);
     display.write("Accelerometer...");
 
-    if (!mpu.begin()) // Try to initialize!
+    /*if (!mpu.begin()) // Try to initialize!
     {
         infoMessln("Failed to find MPU6050 chip");
         while (1)
@@ -78,116 +79,136 @@ void setup()
 
     mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
 
-#ifdef debug
-    Serial.print("Accelerometer range set to: ");
+#ifdef DEBUG
+    debugMess("Accelerometer range set to: ");
     switch (mpu.getAccelerometerRange())
     {
     case MPU6050_RANGE_2_G:
-        Serial.println("+-2G");
+        debugMessln("+-2G");
         break;
     case MPU6050_RANGE_4_G:
-        Serial.println("+-4G");
+        debugMessln("+-4G");
         break;
     case MPU6050_RANGE_8_G:
-        Serial.println("+-8G");
+        debugMessln("+-8G");
         break;
     case MPU6050_RANGE_16_G:
-        Serial.println("+-16G");
+        debugMessln("+-16G");
         break;
     }
 #endif
     mpu.setGyroRange(MPU6050_RANGE_500_DEG);
 
-#ifdef debug
-    Serial.print("Gyro range set to: ");
+#ifdef DEBUG
+    debugMess("Gyro range set to: ");
     switch (mpu.getGyroRange())
     {
     case MPU6050_RANGE_250_DEG:
-        Serial.println("+- 250 deg/s");
+        debugMessln("+- 250 deg/s");
         break;
     case MPU6050_RANGE_500_DEG:
-        Serial.println("+- 500 deg/s");
+        debugMessln("+- 500 deg/s");
         break;
     case MPU6050_RANGE_1000_DEG:
-        Serial.println("+- 1000 deg/s");
+        debugMessln("+- 1000 deg/s");
         break;
     case MPU6050_RANGE_2000_DEG:
-        Serial.println("+- 2000 deg/s");
+        debugMessln("+- 2000 deg/s");
         break;
     }
 #endif
     mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
-#ifdef debug
-    Serial.print("Filter bandwidth set to: ");
+#ifdef DEBUG
+    debugMess("Filter bandwidth set to: ");
     switch (mpu.getFilterBandwidth())
     {
     case MPU6050_BAND_260_HZ:
-        Serial.println("260 Hz");
+        debugMessln("260 Hz");
         break;
     case MPU6050_BAND_184_HZ:
-        Serial.println("184 Hz");
+        debugMessln("184 Hz");
         break;
     case MPU6050_BAND_94_HZ:
-        Serial.println("94 Hz");
+        debugMessln("94 Hz");
         break;
     case MPU6050_BAND_44_HZ:
-        Serial.println("44 Hz");
+        debugMessln("44 Hz");
         break;
     case MPU6050_BAND_21_HZ:
-        Serial.println("21 Hz");
+        debugMessln("21 Hz");
         break;
     case MPU6050_BAND_10_HZ:
-        Serial.println("10 Hz");
+        debugMessln("10 Hz");
         break;
     case MPU6050_BAND_5_HZ:
-        Serial.println("5 Hz");
+        debugMessln("5 Hz");
         break;
     }
-#endif
+#endif*/
 
-    ClearLine(3);
-    display.setCursor(Column_1, Line_3);
+    mpu6050.begin();
+    infoMessln("Starting calibration ...");
+    mpu6050.calcGyroOffsets(true);
+
+    infoMessLF();
+
+    ClearLine(2);
+    display.setCursor(0 * columnWidth, 2 * lineHeight);
     display.write("Accelerometer!");
     display.display();
 
-    infoMessln();
-    delay(500);*/
+    infoMessLF();
+    delay(500);
 
     /*******************************
       L298N Setup
     *******************************/
-    infoMessln("Setting up L298 ...");
+    /*infoMessln("Setting up L298 ...");
 
-    ClearLine(3);
+    ClearLine(2);
     display.setCursor(Column_1, Line_3);
     display.write("Motor driver ...");
     display.display();
 
     motor.setSpeed(initialMotorSpeed); // Set initial speed
 
-    ClearLine(3);
+    ClearLine(2);
     display.setCursor(Column_1, Line_3);
     display.write("Motor driver!");
     display.display();
     delay(500);
-    infoMessln();
+    infoMessLF();*/
 
     /*******************************
       Finished
     *******************************/
     infoMessln("Finished booting up!");
     infoMessln("Entering main ...");
-    infoMessln();
+    infoMessLF();
 
-    ClearLine(3);
-    display.setCursor(Column_1, Line_3);
+    ClearLine(2);
+    display.setCursor(0 * columnWidth, 2 * lineHeight);
     display.write("Starting ...");
     display.display();
     delay(1000);
 
     display.clearDisplay();
     display.display();
+
+    startMillis = millis();
+}
+
+double round1dec(double b)
+{
+  if ((int)((b * 10 - (int)(b * 10)) * 10) >= 5)
+  {
+    return (double)(int)(b * 10) / 10 + 0.1;
+  }
+  else
+  {
+    return (double)(int)(b * 10) / 10;
+  }
 }
 
 void loop()
@@ -195,117 +216,100 @@ void loop()
     /*******************************
       Read Encoders
     *******************************/
-    setEnc.tick();
-    setNewPosition = setEnc.getPosition();
-    if (setNewPosition < setMinValue)
-    {
-        setEnc.setPosition(setMinValue);
-        setNewPosition = setMinValue;
-    }
-    else if (setNewPosition > setMaxValue)
-    {
-        setEnc.setPosition(setMaxValue);
-        setNewPosition = setMaxValue;
-    }
-    if (setNewPosition != setOldPosition)
-    {
-        setOldPosition = setNewPosition;
-        infoMess("Set value: ");
-        infoMessln(setNewPosition);
-        displayPID("S", setNewPosition);
-    }
-
-    PEnc.tick();
-    PNewPosition = PEnc.getPosition();
-    if (PNewPosition < PMinValue)
-    {
-        PEnc.setPosition(PMinValue);
-        PNewPosition = PMinValue;
-    }
-    else if (PNewPosition > PMaxValue)
-    {
-        PEnc.setPosition(PMaxValue);
-        PNewPosition = PMaxValue;
-    }
-    if (PNewPosition != POldPosition)
-    {
-        POldPosition = PNewPosition;
-        infoMess("P value:   ");
-        infoMessln(PNewPosition);
-        displayPID("P", PNewPosition);
-    }
-
-    IEnc.tick();
-    INewPosition = IEnc.getPosition();
-    if (INewPosition < IMinValue)
-    {
-        IEnc.setPosition(IMinValue);
-        INewPosition = IMinValue;
-    }
-    else if (INewPosition > IMaxValue)
-    {
-        IEnc.setPosition(IMaxValue);
-        INewPosition = IMaxValue;
-    }
-    if (INewPosition != IOldPosition)
-    {
-        IOldPosition = INewPosition;
-        infoMess("I value:   ");
-        infoMessln(INewPosition);
-        displayPID("I", INewPosition);
-    }
-
-    DEnc.tick();
-    DNewPosition = DEnc.getPosition();
-    if (DNewPosition < DMinValue)
-    {
-        DEnc.setPosition(DMinValue);
-        DNewPosition = DMinValue;
-    }
-    else if (DNewPosition > DMaxValue)
-    {
-        DEnc.setPosition(DMaxValue);
-        DNewPosition = DMaxValue;
-    }
-    if (DNewPosition != DOldPosition)
-    {
-        DOldPosition = DNewPosition;
-        infoMess("D value:   ");
-        infoMessln(DNewPosition);
-        displayPID("D", DNewPosition);
-    }
+    PidValues myGain = readEncoders();
 
     /*******************************
       Read MPU6050
     *******************************/
-    sensors_event_t a, g, temp; // Get new sensor events with the readings
+    /*sensors_event_t a, g, temp; // Get new sensor events with the readings
     mpu.getEvent(&a, &g, &temp);
 
-#ifdef debug
-    Serial.print("Acceleration X: "); // Print out the values
-    Serial.print(a.acceleration.x);
-    Serial.print(", Y: ");
-    Serial.print(a.acceleration.y);
-    Serial.print(", Z: ");
-    Serial.print(a.acceleration.z);
-    Serial.println(" m/s^2");
+#ifdef DEBUG
+    debugMess("Acceleration X: "); // Print out the values
+    debugMessVar(a.acceleration.x);
+    debugMess(", Y: ");
+    debugMessVar(a.acceleration.y);
+    debugMess(", Z: ");
+    debugMessVar(a.acceleration.z);
+    debugMessln(" m/s^2");
 
-    Serial.print("Rotation X: ");
-    Serial.print(g.gyro.x);
-    Serial.print(", Y: ");
-    Serial.print(g.gyro.y);
-    Serial.print(", Z: ");
-    Serial.print(g.gyro.z);
-    Serial.println(" rad/s");
+    debugMess("Rotation X: ");
+    debugMessVar(g.gyro.x);
+    debugMess(", Y: ");
+    debugMessVar(g.gyro.y);
+    debugMess(", Z: ");
+    debugMessVar(g.gyro.z);
+    debugMessln(" rad/s");
 
-    Serial.print("Temperature: ");
-    Serial.print(temp.temperature);
-    Serial.println(" degC");
+    debugMess("Temperature: ");
+    debugMessVar(temp.temperature);
+    debugMessln(" degC");
 
-    Serial.println("");
-#endif
+    debugMessln("");
 
-    // delay(500);
+    delay(500);
+#endif*/
+
+  if (millis() - startMillis < measureTime)
+  {
+    /*******************************
+        Measure angles
+    *******************************/
+    values++;
+
+    mpu6050.update(); // read values
+
+    angleXAcc += mpu6050.getAngleX();
+    angleYAcc += mpu6050.getAngleY();
+    angleZAcc += mpu6050.getAngleZ();
+  }
+  else
+  {
+    /*******************************
+      Calculate angles
+    *******************************/
+    angleX = round1dec(angleXAcc / values); // calculate averages and round
+    angleY = round1dec(angleYAcc / values);
+    angleZ = round1dec(angleZAcc / values);
+
+    //lightLED(angleX, angleXLock); // light the LED
+
+    if (angleX != oldAngleX)
+    {
+      //printActualAng(0, angleX, angleXLock); // prints the actual values on screen
+      oldAngleX = angleX;
+    }
+    if (angleY != oldAngleY)
+    {
+      //printActualAng(2, angleY, angleYLock);
+      oldAngleY = angleY;
+    }
+    if (angleZ != oldAngleZ)
+    {
+      //printActualAng(4, angleZ, angleZLock);
+      oldAngleZ = angleZ;
+    }
+
+    angleXAcc = 0; // reset all accumulated values
+    angleYAcc = 0;
+    angleZAcc = 0;
+
+    values = 0;
+
+    startMillis = millis();
+  }
+
+  debugMess("\tAngles, X: ");
+  debugMessVar(angleX);
+  debugMess("\tY: ");
+  debugMessVar(angleY);
+  debugMess("\tZ: ");
+  debugMessVar(angleZ);
+
+  debugMess("\t");
+  debugMessVar(values);
+  debugMess(" values");
+  debugMessLF();
 
     // motorTest();
 }
