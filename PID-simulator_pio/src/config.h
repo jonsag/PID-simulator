@@ -67,24 +67,11 @@
 *******************************/
 #include <Wire.h>
 #include <SPI.h>
-/*#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
-#define textWidth 8
-#define OLED_RESET -1
-#define SCREEN_ADDRESS 0x3C
-
-#define lineHeight 8
-#define columnWidth 16
-
-extern Adafruit_SSD1306 display; // announce the screen, declared in config.h*/
 
 #include <SSD1306Ascii.h>
 #include <SSD1306AsciiWire.h> // for I2C
 
-extern SSD1306AsciiWire display;
+extern SSD1306AsciiWire display; // announce the screen, declared in config.h
 
 // #define SCREEN_WIDTH 128
 // #define SCREEN_HEIGHT 32
@@ -137,15 +124,9 @@ PidValues readEncoders(); // function declaration that returns our struct
 /*******************************
   MPU6050, accelerometer
 *******************************/
-/*#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
-
-#define MPU_ADDRESS 0x68
-
-extern Adafruit_MPU6050 mpu; // announce gyro definition*/
-
 #include <MPU6050_tockn.h>
-extern MPU6050 mpu6050;
+
+extern MPU6050 mpu6050; // announce gyro definition
 
 extern double angle; // the value used by the regulator
 
@@ -153,22 +134,7 @@ extern double angleXAcc; // holds the accumulated readings
 extern double angleX;    // holds the averaged angles
 extern double oldAngleX; // holds the old values
 
-/*extern double angleYAcc;
-extern double angleY;
-extern double oldAngleY;
-
-extern double angleZAcc;
-extern double angleZ;
-extern double oldAngleZ;
-
-extern double angleXLock; // stores the locked angles
-extern double angleYLock;
-extern double angleZLock;
-
-extern boolean angleXLocked;
-extern boolean angleYLocked;
-extern boolean angleZLocked;
-extern boolean anglesLocked;*/
+extern boolean anglesLocked;
 
 extern double measureTime; // for how long should values be read before averaged, ms
 extern int values;
@@ -176,15 +142,14 @@ extern int values;
 /*******************************
   L298N, motor driver
 *******************************/
-/*#include <L298N.h>
+#include <L298N.h>
 
-const unsigned int IN1 = 2; // const are safe to keep in .h files, they will not cause "multiple definition"
-const unsigned int IN2 = 3;
-const unsigned int EN = 1;
+#define IN1 2 // const are safe to keep in .h files, they will not cause "multiple definition"
+#define IN2 3
+#define EN 1
 #define initialMotorSpeed 70
 
 extern L298N motor; // announce motor definition
-*/
 
 /*******************************
   Misc
@@ -194,5 +159,5 @@ extern double startMillis;
 // String mess = ""; // holds the message
 // String oldMess = "";
 
-extern double messMillis;
-#define messTime 2000 // how long to show a message, ms
+// extern double messMillis;
+// #define messTime 2000 // how long to show a message, ms
