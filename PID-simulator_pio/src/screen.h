@@ -1,9 +1,12 @@
 #pragma once
 #include <Arduino.h>
 
-void ClearLine(int LineNo);
+void clearLine(byte LineNo);
 
-void ClearColumn(int ColumnNo, int LineNo);
+void clearColumn(byte ColumnNo, byte LineNo);
+
+void clearChars(byte col, byte row, byte numChars);
 
 void displayPID(String factor, float value);
- 
+
+void printAngle(double angleX);

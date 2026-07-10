@@ -23,8 +23,8 @@ PidValues readEncoders()
     if (setNewPosition != setOldPosition)
     {
         setOldPosition = setNewPosition;
-        infoMess("Set value: ");
-        infoMessVarln(setNewPosition);
+        debugMess("Set value: ");
+        debugMessVarln(setNewPosition);
         displayPID("Set", setNewPosition);
         // showValues = true;
     }
@@ -44,7 +44,7 @@ PidValues readEncoders()
     if (PNewPosition != POldPosition)
     {
         POldPosition = PNewPosition;
-        infoMess("P change\t");
+        debugMess("P change\t");
         debugMess("P value:   ");
         debugMessVarln(PNewPosition);
         values.p = float(PNewPosition) / 10;
@@ -67,7 +67,7 @@ PidValues readEncoders()
     if (INewPosition != IOldPosition)
     {
         IOldPosition = INewPosition;
-        infoMess("I change\t");
+        debugMess("I change\t");
         debugMess("I value:   ");
         debugMessVarln(INewPosition);
         values.i = float(INewPosition) / 10;
@@ -90,7 +90,7 @@ PidValues readEncoders()
     if (DNewPosition != DOldPosition)
     {
         DOldPosition = DNewPosition;
-        infoMess("D change\t");
+        debugMess("D change\t");
         debugMess("D value:   ");
         debugMessVarln(DNewPosition);
         values.d = float(DNewPosition) / 10;
@@ -101,12 +101,12 @@ PidValues readEncoders()
 #if INFO || DEBUG
     if (showValues)
     {
-        infoMess("Kp: ");
-        infoMessVar(values.p);
-        infoMess("\tKi: ");
-        infoMessVar(values.i);
-        infoMess("\tKp: ");
-        infoMessVarln(values.d);
+        debugMess("Kp: ");
+        debugMessVar(values.p);
+        debugMess("\tKi: ");
+        debugMessVar(values.i);
+        debugMess("\tKp: ");
+        debugMessVarln(values.d);
     }
 #endif
 

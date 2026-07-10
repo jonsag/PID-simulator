@@ -33,7 +33,7 @@ void setup()
     infoMessln("Starting screen ...");
     infoMessLF();
 
-    if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
+    /*if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
     {
         infoMessln("SSD1306 allocation failed");
         for (;;)
@@ -55,15 +55,33 @@ void setup()
     display.setCursor(0 * columnWidth, 1 * lineHeight);
     display.write(web);
 
-    display.display(); // Show the display buffer on the screen. You MUST call display() after drawing commands to make them visible on screen!
+    display.display(); // Show the display buffer on the screen. You MUST call display() after drawing commands to make them visible on screen!*/
+
+    Wire.begin();
+    Wire.setClock(400000L); // run I2C at high speed (optional)
+
+    // display.begin(&SH1106_128x64, 0x3C);
+    display.begin(&Adafruit128x32, SCREEN_ADDRESS); // check I2C address
+
+    display.setFont(Adafruit5x7); // standard font
+    display.clear();
+
+    // Skriv ut text (Du behöver inte anropa display.display() längre!)
+    display.println(programName);
+    display.println(web);
+
+    display.setCursor(0, 0);
+    display.print(programName);
+    display.setCursor(0, 1);
+    display.print(web);
 
     /*******************************
       MPU6050 Setup
     *******************************/
     infoMessln("Starting MPU6050 ...");
 
-    display.setCursor(0 * columnWidth, 2 * lineHeight);
-    display.write("Accelerometer...");
+    display.setCursor(0, 2);
+    display.print("Accelerometer...");
 
     /*if (!mpu.begin()) // Try to initialize!
     {
@@ -153,10 +171,9 @@ void setup()
 
     infoMessLF();
 
-    ClearLine(2);
-    display.setCursor(0 * columnWidth, 2 * lineHeight);
-    display.write("Accelerometer!");
-    display.display();
+    clearLine(2);
+    display.setCursor(0, 2);
+    display.print("Accelerometer!");
 
     infoMessLF();
     delay(500);
@@ -166,14 +183,14 @@ void setup()
     *******************************/
     /*infoMessln("Setting up L298 ...");
 
-    ClearLine(2);
+    clearLine(2);
     display.setCursor(Column_1, Line_3);
     display.write("Motor driver ...");
     display.display();
 
     motor.setSpeed(initialMotorSpeed); // Set initial speed
 
-    ClearLine(2);
+    clearLine(2);
     display.setCursor(Column_1, Line_3);
     display.write("Motor driver!");
     display.display();
@@ -187,28 +204,26 @@ void setup()
     infoMessln("Entering main ...");
     infoMessLF();
 
-    ClearLine(2);
-    display.setCursor(0 * columnWidth, 2 * lineHeight);
+    clearLine(2);
+    display.setCursor(0, 2);
     display.write("Starting ...");
-    display.display();
     delay(1000);
 
-    display.clearDisplay();
-    display.display();
+    display.clear();
 
     startMillis = millis();
 }
 
 double round1dec(double b)
 {
-  if ((int)((b * 10 - (int)(b * 10)) * 10) >= 5)
-  {
-    return (double)(int)(b * 10) / 10 + 0.1;
-  }
-  else
-  {
-    return (double)(int)(b * 10) / 10;
-  }
+    if ((int)((b * 10 - (int)(b * 10)) * 10) >= 5)
+    {
+        return (double)(int)(b * 10) / 10 + 0.1;
+    }
+    else
+    {
+        return (double)(int)(b * 10) / 10;
+    }
 }
 
 void loop()
@@ -250,66 +265,70 @@ void loop()
     delay(500);
 #endif*/
 
-  if (millis() - startMillis < measureTime)
-  {
-    /*******************************
-        Measure angles
-    *******************************/
-    values++;
-
     mpu6050.update(); // read values
+    angle += mpu6050.getAngleX();
 
-    angleXAcc += mpu6050.getAngleX();
-    angleYAcc += mpu6050.getAngleY();
-    angleZAcc += mpu6050.getAngleZ();
-  }
-  else
-  {
-    /*******************************
-      Calculate angles
-    *******************************/
-    angleX = round1dec(angleXAcc / values); // calculate averages and round
-    angleY = round1dec(angleYAcc / values);
-    angleZ = round1dec(angleZAcc / values);
-
-    //lightLED(angleX, angleXLock); // light the LED
-
-    if (angleX != oldAngleX)
+    if (millis() - startMillis < measureTime)
     {
-      //printActualAng(0, angleX, angleXLock); // prints the actual values on screen
-      oldAngleX = angleX;
+        /*******************************
+            Measure angles
+        *******************************/
+        values++;
+
+        // mpu6050.update(); // read values
+
+        angleXAcc += mpu6050.getAngleX();
+        // angleYAcc += mpu6050.getAngleY();
+        // angleZAcc += mpu6050.getAngleZ();
     }
-    if (angleY != oldAngleY)
+    else
     {
-      //printActualAng(2, angleY, angleYLock);
-      oldAngleY = angleY;
+        /*******************************
+          Calculate angles
+        *******************************/
+        angleX = round1dec(angleXAcc / values); // calculate averages and round
+        // angleY = round1dec(angleYAcc / values);
+        // angleZ = round1dec(angleZAcc / values);
+
+        // lightLED(angleX, angleXLock); // light the LED
+
+        if (angleX != oldAngleX)
+        {
+            // printActualAng(0, angleX, angleXLock); // prints the actual values on screen
+            printAngle(angleX);
+            oldAngleX = angleX;
+        }
+        /*if (angleY != oldAngleY)
+        {
+            // printActualAng(2, angleY, angleYLock);
+            oldAngleY = angleY;
+        }
+        if (angleZ != oldAngleZ)
+        {
+            // printActualAng(4, angleZ, angleZLock);
+            oldAngleZ = angleZ;
+        }*/
+
+        angleXAcc = 0; // reset all accumulated values
+        // angleYAcc = 0;
+        // angleZAcc = 0;
+
+        values = 0;
+
+        startMillis = millis();
     }
-    if (angleZ != oldAngleZ)
-    {
-      //printActualAng(4, angleZ, angleZLock);
-      oldAngleZ = angleZ;
-    }
 
-    angleXAcc = 0; // reset all accumulated values
-    angleYAcc = 0;
-    angleZAcc = 0;
+    debugMess("\tAngles, X: ");
+    debugMessVar(angleX);
+    /*debugMess("\tY: ");
+    debugMessVar(angleY);
+    debugMess("\tZ: ");
+    debugMessVar(angleZ);*/
 
-    values = 0;
-
-    startMillis = millis();
-  }
-
-  debugMess("\tAngles, X: ");
-  debugMessVar(angleX);
-  debugMess("\tY: ");
-  debugMessVar(angleY);
-  debugMess("\tZ: ");
-  debugMessVar(angleZ);
-
-  debugMess("\t");
-  debugMessVar(values);
-  debugMess(" values");
-  debugMessLF();
+    debugMess("\t");
+    debugMessVar(values);
+    debugMess(" values");
+    debugMessLF();
 
     // motorTest();
 }

@@ -9,3 +9,4 @@ PID-simulator_kicad/fabrication-toolkit-options.json
 *.rules
 *.ses
 *.kicad_prl
+*.bak
