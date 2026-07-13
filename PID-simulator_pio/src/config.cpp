@@ -29,6 +29,12 @@ long DNewPosition;
 /*******************************
   PID
 *******************************/
+float setpoint = 0.0; // Ditt börvärde från rotationsenkodern (-180 till +180)
+float input = 0.0;    // Ditt ärvärde (angle från MPU6050)
+float output = 0.0;   // Utsignalen som PID räknar ut (-255 till +255)
+
+// Skapa PID-instansen
+QuickPID myPID(&input, &output, &setpoint);
 
 /*******************************
   MPU6050, accelerometer

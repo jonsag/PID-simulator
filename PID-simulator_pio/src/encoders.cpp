@@ -20,6 +20,7 @@ PidValues readEncoders()
         setEnc.setPosition(setMaxValue);
         setNewPosition = setMaxValue;
     }
+
     if (setNewPosition != setOldPosition)
     {
         setOldPosition = setNewPosition;
@@ -27,6 +28,8 @@ PidValues readEncoders()
         debugMessVarln(setNewPosition);
         displayPID("Set", setNewPosition);
         // showValues = true;
+
+        setpoint = setNewPosition;
     }
 
     PEnc.tick();
@@ -41,6 +44,7 @@ PidValues readEncoders()
         PEnc.setPosition(PMaxValue);
         PNewPosition = PMaxValue;
     }
+
     if (PNewPosition != POldPosition)
     {
         POldPosition = PNewPosition;
@@ -64,6 +68,7 @@ PidValues readEncoders()
         IEnc.setPosition(IMaxValue);
         INewPosition = IMaxValue;
     }
+
     if (INewPosition != IOldPosition)
     {
         IOldPosition = INewPosition;
@@ -87,6 +92,7 @@ PidValues readEncoders()
         DEnc.setPosition(DMaxValue);
         DNewPosition = DMaxValue;
     }
+
     if (DNewPosition != DOldPosition)
     {
         DOldPosition = DNewPosition;

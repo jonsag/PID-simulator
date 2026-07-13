@@ -119,7 +119,15 @@ struct PidValues
   float d;
 };
 
-PidValues readEncoders(); // function declaration that returns our struct
+//PidValues readEncoders(); // function declaration that returns our struct
+
+#include <QuickPID.h>
+
+extern float setpoint; // Ditt börvärde från rotationsenkodern (-180 till +180)
+extern float input;    // Ditt ärvärde (angle från MPU6050)
+extern float output;   // Utsignalen som PID räknar ut (-255 till +255)
+
+extern QuickPID myPID;
 
 /*******************************
   MPU6050, accelerometer
